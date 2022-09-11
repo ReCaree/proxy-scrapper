@@ -2,8 +2,9 @@ import os
 import requests
 import threading
 import time
-import remove_duplicates
 
+from checker import *
+from remove_duplicates import *
 from colorama import init, Fore
 
 init(autoreset=True)
@@ -26,7 +27,7 @@ $$ |      $$ |  $$ | $$$$$$  |$$ /  $$ |    $$ |          \$$$$$$  |\$$$$$$  |$$
 
 print(f"{Fore.LIGHTBLACK_EX}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
-DEBUG = False
+DEBUG = True
 
 def print_info(t):
   print(f"{Fore.GREEN}[?] {Fore.RED}{t}")
@@ -204,22 +205,22 @@ print_debug("SOCKS5 Worker Joined\n")
 
 print_info("Removing Duplicates\n")
 
-print_debug("Creatng HTTP(s) Duplicates Thread")
-tdh = threading.Thread(target=remove_duplicates.http_remove_duplicates)
+print_debug("Creating HTTP(s) Duplicates Thread")
+tdh = threading.Thread(target=http_remove_duplicates)
 print_debug("HTTP(s) Duplicates Thread Created")
 print_debug("Starting HTTP(s) Duplicates Thread")
 tdh.start()
 print_debug("HTTP(s) Duplicates Thread Started\n")
 
-print_debug("Creatng SOCKS4 Duplicates Thread")
-tds4 = threading.Thread(target=remove_duplicates.socks4_remove_duplicates)
+print_debug("Creating SOCKS4 Duplicates Thread")
+tds4 = threading.Thread(target=socks4_remove_duplicates)
 print_debug("SOCKS4 Duplicates Thread Created")
 print_debug("Starting SOCKS4 Duplicates Thread")
 tds4.start()
 print_debug("SOCKS4 Duplicates Thread Started\n")
 
-print_debug("Creatng SOCKS5 Duplicates Thread")
-tds5 = threading.Thread(target=remove_duplicates.socks5_remove_duplicates)
+print_debug("Creating SOCKS5 Duplicates Thread")
+tds5 = threading.Thread(target=socks5_remove_duplicates)
 print_debug("SOCKS5 Duplicates Thread Created")
 print_debug("Starting SOCKS5 Duplicates Thread")
 tds5.start()
@@ -231,5 +232,39 @@ tds4.join()
 print_debug("SOCKS4 Duplicates Worker Joined")
 tds5.join()
 print_debug("SOCKS5 Duplicates Worker Joined\n")
+
+print_info("Checking Proxies\n")
+
+def check_proxy(file, file2):
+  checker = ProxyChecker()
+  checker.checkList(file, file2)
+
+print_debug("Creating HTTP(s) Checker Thread")
+tch = threading.Thread(target=check_proxy, args=("./proxy/http-removed.txt", "./proxy/http-checked", ))
+print_debug("HTTP(s) Checker Thread Created")
+print_debug("Starting HTTP(s) Checker Thread")
+tch.start()
+print_debug("HTTP(s) Checker Thread Started\n")
+
+print_debug("Creating SOCKS4 Checker Thread")
+tcs4 = threading.Thread(target=check_proxy, args=("./proxy/socks4-removed.txt", "./proxy/socks4-checked", ))
+print_debug("SOCKS4 Checker Thread Created")
+print_debug("Starting SOCKS4 Checker Thread")
+tcs4.start()
+print_debug("SOCKS4 Checker Thread Started\n")
+
+print_debug("Creating SOCKS5 Checker Thread")
+tcs5 = threading.Thread(target=check_proxy, args=("./proxy/socks5-removed.txt", "./proxy/socks5-checked", ))
+print_debug("SOCKS5 Checker Thread Created")
+print_debug("Starting SOCKS5 Checker Thread")
+tcs5.start()
+print_debug("SOCKS5 Checker Thread Started\n")
+
+tch.join()
+print_debug("HTTP(s) Checker Worker Joined")
+tcs4.join()
+print_debug("SOCKS4 Checker Worker Joined")
+tcs5.join()
+print_debug("SOCKS5 Checker Worker Joined\n")
 
 print(f"{Fore.LIGHTBLACK_EX}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
