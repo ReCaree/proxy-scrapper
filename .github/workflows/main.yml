@@ -21,6 +21,6 @@ jobs:
     - name: Commit
       uses: EndBug/add-and-commit@v9.1.0
       with:
-        author_name: Auto Scrap
+        message: Auto Scrap
       
       
