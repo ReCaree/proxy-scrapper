@@ -19,3 +19,7 @@ Proxy Scrapper that scrapes proxy from ~40 source. Need help to fix shit code.
   ```bash
   python scrapper.py
   ```
+  
+# Contributing
+
+Fell free to contribute. Add fixes or source.
