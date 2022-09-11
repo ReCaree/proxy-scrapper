@@ -20,6 +20,4 @@ jobs:
     - name: Commit
       uses: EndBug/add-and-commit@v9.1.0
       with:
-        author_name: ScrapperBOT
-        author_email: ReCaree@users.noreply.github.com
         message: Auto Scrap [BOT]
