@@ -22,7 +22,7 @@ $$ |      $$ |  $$ |$$ |  $$ |$$  /\$$\     $$ |          $$\   $$ |$$ |  $$\ $$
 $$ |      $$ |  $$ | $$$$$$  |$$ /  $$ |    $$ |          \$$$$$$  |\$$$$$$  |$$ |  $$ |$$ |  $$ |$$ |      $$ |      $$$$$$$$\ $$ |  $$ |
 \__|      \__|  \__| \______/ \__|  \__|    \__|           \______/  \______/ \__|  \__|\__|  \__|\__|      \__|      \________|\__|  \__|
 
-{Fore.RED}A Simple Program To Scrape Proxy. (github)\n''')
+{Fore.RED}A Simple Program To Scrape Proxy. (https://github.com/ReCaree/proxy-scrapper)\n''')
 
 print(f"{Fore.LIGHTBLACK_EX}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
@@ -226,9 +226,9 @@ tds5.start()
 print_debug("SOCKS5 Duplicates Thread Started\n")
 
 tdh.join()
-print_debug("HTTP(s) Duplicates Worker Joined\n")
+print_debug("HTTP(s) Duplicates Worker Joined")
 tds4.join()
-print_debug("SOCKS4 Duplicates Worker Joined\n")
+print_debug("SOCKS4 Duplicates Worker Joined")
 tds5.join()
 print_debug("SOCKS5 Duplicates Worker Joined\n")
 
