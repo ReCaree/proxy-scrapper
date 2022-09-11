@@ -18,11 +18,6 @@ jobs:
     - name: Run the scrapper
       run: python scrapper.py 
     - name: Commit
-      run: |
-        set -e
-        git config --global user.email "41898282+auto-scrape[bot]@users.noreply.github.com"
-        git config --global user.name "Auto Scrape [BOT]"
-        d="$(date --rfc-3339=s)"
-        git add --all
-        git commit --allow-empty -m "Auto Scrape [$d]"
-        git push -f origin main
+      uses: EndBug/add-and-commit@v9.1.0
+      with:
+        message: Auto Scrap [BOT]
