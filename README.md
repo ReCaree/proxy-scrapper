@@ -4,7 +4,7 @@ PROXY SCRAPPER
 
 </h2>
 
-Proxy Scrapper that scrapes proxy from ~40 source. Need help to fix shit code.
+Proxy Scrapper that scrapes proxy and check the proxies (checker curently disabled because its to slow) from ~40 source. Need help to fix shit code.
 
 # Download
 
