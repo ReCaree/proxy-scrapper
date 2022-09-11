@@ -47,6 +47,7 @@ class ProxyChecker():
     if proxy_type != "Invalid":
       # print("Proxy {} is valid and it's type is {}".format(proxy,proxy_type))
       self.checkedProxy.append(proxy)
+      print(self.checkedProxy)
     else:
       pass
 
