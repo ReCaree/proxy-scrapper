@@ -29,7 +29,7 @@ class ProxyChecker():
     proxy_type = "Invalid"
     proxy = proxy.replace(" ","")
     proxy = proxy.replace("\n","")
-    print("Verifying proxy: {}".format(proxy))
+    # print("Verifying proxy: {}".format(proxy))
 
     try:
       proxy_type = self.checkProxy("socks5",proxy)
