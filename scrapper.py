@@ -37,9 +37,12 @@ def print_debug(t):
 
 print_info("Scrapping Proxies\n")
 
-http = open("http.txt", "wb")
-socks4 = open("socks4.txt", "wb")
-socks5 = open("socks5.txt", "wb")
+if not os.path.isdir("proxy"):
+  os.mkdir("proxy")
+
+http = open("proxy/http.txt", "wb")
+socks4 = open("proxy/socks4.txt", "wb")
+socks5 = open("proxy/socks5.txt", "wb")
 
 def http_worker():
   try:
