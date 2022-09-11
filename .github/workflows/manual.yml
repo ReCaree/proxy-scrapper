@@ -16,8 +16,11 @@ jobs:
     - name: Install Python dependencies
       uses: py-actions/py-dependency-install@v3.0.0
     - name: Run the scrapper
-      run: python scrapper.py
+      run: |
+        python scrapper.py 
+        d="$(date --rfc-3339=s)"
     - name: Commit
       uses: EndBug/add-and-commit@v9.1.0
       with:
-        message: 'Auto Scrap (Manual)'
+        message: 'Auto Scrap (Testing) [$d]'
+      
