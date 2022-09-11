@@ -1,5 +1,9 @@
 import hashlib
 
+#
+# https://www.codevscolor.com/python-remove-duplicate-lines-text-file
+#
+
 def http_remove_duplicates():
   completed_lines_hash = set()
 
