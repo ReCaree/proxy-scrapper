@@ -1,63 +1,37 @@
-import requests
-import json
+import time, json, threading, requests
+from colorama import Fore, init; init(autoreset=True)
 
-class ProxyChecker():
-  def __init__(self) -> None:
-    self.checkedProxy = []
+__LOCK__ = threading.Lock()
+__CONFIG__ = json.load(open("./config.json"))
 
-  # Check if proxy is working
-  def checkProxy(self,ptype,proxyip):
- 
-    if ptype == "https":
-      proxy = { "https": "https://"+proxyip }
-    elif ptype == "http":
-      proxy = { "https": "https://"+proxyip }
-    elif ptype == "socks5":
-      proxy = { "http": "socks5h://"+proxyip, "https": "socks5h://"+proxyip }
-    elif ptype == "socks4":
-      proxy = { "http": "socks4://"+proxyip, "https": "socks4://"+proxyip } 
+class Console:
+  @staticmethod
+  def printf(content: str):
+    __LOCK__.acquire()
+    print(content)
+    __LOCK__.release()
 
-    Session = requests.Session()
-    response = Session.get('https://google.com', proxies = proxy, timeout=5)
-    if response.status_code == 200:
-      return ptype
-    else:
-      return ""
+class Check(threading.Thread):
+  def __init__(self, proxy: str,) -> None:
+    self.proxy = proxy
 
-# Validate proxy type
-  def verifyProxy(self,proxy): 
-    proxy_type = "Invalid"
-    proxy = proxy.replace(" ","")
-    proxy = proxy.replace("\n","")
-    # print("Verifying proxy: {}".format(proxy))
+    threading.Thread.__init__(self)
+    self.run()
 
-    try:
-      proxy_type = self.checkProxy("socks5",proxy)
-    except:
-      try:
-        proxy_type = self.checkProxy("socks4",proxy)
-      except:
-        try:
-          proxy_type = self.checkProxy("https",proxy)
-        except:
-          try:
-            proxy_type = self.checkProxy("http",proxy)
-          except:
-            pass   
-    if proxy_type != "Invalid":
-      # print("Proxy {} is valid and it's type is {}".format(proxy,proxy_type))
-      self.checkedProxy.append(proxy)
-      print(self.checkedProxy)
-    else:
-      pass
+  def run(self):
+    p = {'http': self.proxy}
+    session = requests.Session()
+    res = session.get("https://google.com", proxies=p, timeout=1000)
 
-  def checkList(self,file,file2):
-    with open(file, 'r') as f:
-      for line in f:
-        self.verifyProxy(line)
+    if res.status_code == 200:
+      Console.printf(f"Working: {self.proxy}")
 
-    with open(file2, "wb") as f:
-      f.write(self.checkedProxy)
+for proxy in list(set(open("./proxy/http-removed.txt", "r+", encoding="utf-8").read().splitlines())):
+  while threading.active_count() >= __CONFIG__["checker-threads"]:
+    time.sleep(0.5)
 
-# checker = ProxyChecker()
-# checker.checkList("./proxy/http-removed.txt") 
+  try:
+    Check(proxy)
+  except Exception as e:
+    print(e)
+    pass

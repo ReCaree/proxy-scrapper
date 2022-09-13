@@ -3,17 +3,29 @@ import requests
 import threading
 import time
 
-from checker import *
+from __checker import *
 from remove_duplicates import *
 from colorama import init, Fore
+
+__LOCK__ = threading.Lock()
 
 init(autoreset=True)
 
 def cls():
   os.system('cls' if os.name=='nt' else 'clear')
 
-cls()
-print(f'''{Fore.RED}
+class Console:
+  @staticmethod
+  def printf(s: str):
+    __LOCK__.acquire()
+    print(s)
+    __LOCK__.release()
+
+  @staticmethod
+  def print_logo():
+    print(f'''{Fore.RED}
+
+  
 $$$$$$$\  $$$$$$$\   $$$$$$\  $$\   $$\ $$\     $$\        $$$$$$\   $$$$$$\  $$$$$$$\   $$$$$$\  $$$$$$$\  $$$$$$$\  $$$$$$$$\ $$$$$$$\  
 $$  __$$\ $$  __$$\ $$  __$$\ $$ |  $$ |\$$\   $$  |      $$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ $$  _____|$$  __$$\ 
 $$ |  $$ |$$ |  $$ |$$ /  $$ |\$$\ $$  | \$$\ $$  /       $$ /  \__|$$ /  \__|$$ |  $$ |$$ /  $$ |$$ |  $$ |$$ |  $$ |$$ |      $$ |  $$ |
@@ -25,16 +37,20 @@ $$ |      $$ |  $$ | $$$$$$  |$$ /  $$ |    $$ |          \$$$$$$  |\$$$$$$  |$$
 
 {Fore.RED}A Simple Program To Scrape Proxy. (https://github.com/ReCaree/proxy-scrapper)\n''')
 
+cls()
+
+Console.print_logo()
+
 print(f"{Fore.LIGHTBLACK_EX}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
 
 DEBUG = True
 
 def print_info(t):
-  print(f"{Fore.GREEN}[?] {Fore.RED}{t}")
+  Console.printf(f"{Fore.GREEN}[?] {Fore.RED}{t}")
 
 def print_debug(t):
   if (DEBUG == True):
-    print(f"{Fore.YELLOW}[*] {t}")
+    Console.print(f"{Fore.YELLOW}[*] {t}")
 
 print_info("Scrapping Proxies\n")
 
