@@ -42,6 +42,9 @@ class Check(threading.Thread):
     res = session.get("https://google.com", proxies=p, timeout=1000)
 
     if res.status_code == 200:
+      with open("./proxy/http-checked.txt", "a", encoding="utf-8") as f:
+        f.write(f"{self.proxy}\n")
+
       Console.printf(f"+ {self.proxy}")
     else:
       Console.printf(f"- {self.proxy}")
