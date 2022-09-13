@@ -17,6 +17,8 @@ jobs:
       uses: py-actions/py-dependency-install@v3.0.0
     - name: Run the scrapper
       run: python scrapper.py 
+    - name: Run the http checker
+      run: python checker.py
     - name: Commit
       uses: EndBug/add-and-commit@v9.1.0
       with:
