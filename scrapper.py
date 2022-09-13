@@ -50,7 +50,7 @@ def print_info(t):
 
 def print_debug(t):
   if (DEBUG == True):
-    Console.print(f"{Fore.YELLOW}[*] {t}")
+    Console.printf(f"{Fore.YELLOW}[*] {t}")
 
 print_info("Scrapping Proxies\n")
 
