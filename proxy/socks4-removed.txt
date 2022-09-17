@@ -1006,9 +1006,9 @@
 222.165.234.147:52667
 222.252.21.100:5678
 223.96.90.216:8085<html>
-<head><title>504 Gateway Time-out</title></head>
+<head><title>502 Bad Gateway</title></head>
 <body>
-<center><h1>504 Gateway Time-out</h1></center>
+<center><h1>502 Bad Gateway</h1></center>
 <hr><center>openresty</center>
 </body>
 </html>
@@ -11071,8 +11071,12 @@
 109.73.180.67:5678
 165.227.104.122:15006
 182.75.220.186:40637
+158.140.190.211:5678
+91.121.210.56:60191
 138.197.138.160:19363
 <html>
+<head><title>504 Gateway Time-out</title></head>
+<center><h1>504 Gateway Time-out</h1></center>
 195.29.106.2:4153
 52.47.137.181:80
 207.180.241.193:80
