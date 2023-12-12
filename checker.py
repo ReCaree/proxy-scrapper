@@ -1,65 +1,92 @@
-import time, json, threading, requests
-from colorama import Fore, init; init(autoreset=True)
+import re, urllib.request, random
+from time import time
+from utils import Console
+from threading import Thread
 
-__LOCK__ = threading.Lock()
-__CONFIG__ = json.load(open("./config.json"))
-
-class Console:
-  @staticmethod
-  def printf(content: str):
-    __LOCK__.acquire()
-    print(content
-    .replace("+", f"{Fore.LIGHTBLACK_EX}[{Fore.GREEN}+{Fore.LIGHTBLACK_EX}]{Fore.GREEN}")
-    .replace("-", f"{Fore.LIGHTBLACK_EX}[{Fore.RED}+{Fore.LIGHTBLACK_EX}]{Fore.RED}"))
-    __LOCK__.release()
-
-  @staticmethod
-  def print_logo():
-    print(f'''{Fore.RED}
-
-  
-$$$$$$$\  $$$$$$$\   $$$$$$\  $$\   $$\ $$\     $$\        $$$$$$\   $$$$$$\  $$$$$$$\   $$$$$$\  $$$$$$$\  $$$$$$$\  $$$$$$$$\ $$$$$$$\  
-$$  __$$\ $$  __$$\ $$  __$$\ $$ |  $$ |\$$\   $$  |      $$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ $$  _____|$$  __$$\ 
-$$ |  $$ |$$ |  $$ |$$ /  $$ |\$$\ $$  | \$$\ $$  /       $$ /  \__|$$ /  \__|$$ |  $$ |$$ /  $$ |$$ |  $$ |$$ |  $$ |$$ |      $$ |  $$ |
-$$$$$$$  |$$$$$$$  |$$ |  $$ | \$$$$  /   \$$$$  /        \$$$$$$\  $$ |      $$$$$$$  |$$$$$$$$ |$$$$$$$  |$$$$$$$  |$$$$$\    $$$$$$$  |
-$$  ____/ $$  __$$< $$ |  $$ | $$  $$<     \$$  /          \____$$\ $$ |      $$  __$$< $$  __$$ |$$  ____/ $$  ____/ $$  __|   $$  __$$< 
-$$ |      $$ |  $$ |$$ |  $$ |$$  /\$$\     $$ |          $$\   $$ |$$ |  $$\ $$ |  $$ |$$ |  $$ |$$ |      $$ |      $$ |      $$ |  $$ |
-$$ |      $$ |  $$ | $$$$$$  |$$ /  $$ |    $$ |          \$$$$$$  |\$$$$$$  |$$ |  $$ |$$ |  $$ |$$ |      $$ |      $$$$$$$$\ $$ |  $$ |
-\__|      \__|  \__| \______/ \__|  \__|    \__|           \______/  \______/ \__|  \__|\__|  \__|\__|      \__|      \________|\__|  \__|
-
-{Fore.RED}A Simple Program To Scrape Proxy. (https://github.com/ReCaree/proxy-scrapper)\n''')
-
-class Check(threading.Thread):
-  def __init__(self, proxy: str,) -> None:
-    self.proxy = proxy
-
-    threading.Thread.__init__(self)
-    self.run()
-
-  def run(self):
-    p = {'http': self.proxy}
-    session = requests.Session()
-    res = session.get("https://google.com", proxies=p, timeout=1000)
-
-    if res.status_code == 200:
-      with open("./proxy/http-checked.txt", "a", encoding="utf-8") as f:
-        f.write(f"{self.proxy}\n")
-
-      Console.printf(f"+ {self.proxy}")
-    else:
-      Console.printf(f"- {self.proxy}")
+# https://github.com/iw4p/proxy-scraper/blob/master/proxyChecker.py
 
 Console.print_logo()
+# Console.print_seperator()
 
-print(f"{Fore.LIGHTBLACK_EX}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n")
+user_agents = []
+with open("user_agents.txt", "r") as f:
+    for line in f:
+        user_agents.append(line.replace("\n", ""))
+
+class Proxy:
+    def __init__(self, method, proxy):
+        if method.lower() not in ["http", "https"]:
+            raise NotImplementedError("Only HTTP and HTTPS are supported")
+        self.method = method.lower()
+        self.proxy = proxy
+
+    def is_valid(self):
+        return re.match(r"\d{1,3}(?:\.\d{1,3}){3}(?::\d{1,5})?$", self.proxy)
+
+    def check(self, site, timeout, user_agent):
+        url = self.method + "://" + self.proxy
+        proxy_support = urllib.request.ProxyHandler({self.method: url})
+        opener = urllib.request.build_opener(proxy_support)
+        urllib.request.install_opener(opener)
+        req = urllib.request.Request(self.method + "://" + site)
+        req.add_header("User-Agent", user_agent)
+        try:
+            start_time = time()
+            urllib.request.urlopen(req, timeout=timeout)
+            end_time = time()
+            time_taken = end_time - start_time
+            return True, time_taken, None
+        except Exception as e:
+            return False, 0, e
+
+    def __str__(self):
+        return self.proxy
 
 
-for proxy in list(set(open("./proxy/http-removed.txt", "r+", encoding="utf-8").read().splitlines())):
-  while threading.active_count() >= __CONFIG__["checker-threads"]:
-    time.sleep(0.5)
+def verbose_print(verbose, message):
+    if verbose:
+        print(message)
 
-  try:
-    Check(proxy)
-  except Exception as e:
-    print(e)
-    pass
+
+def check(file, timeout, method, site, verbose, random_user_agent):
+    proxies = []
+    with open(file, "r") as f:
+        for line in f:
+            proxies.append(Proxy(method, line.replace("\n", "")))
+
+    print(f"Checking {len(proxies)} proxies")
+    proxies = filter(lambda x: x.is_valid(), proxies)
+    valid_proxies = []
+    user_agent = random.choice(user_agents)
+
+    def check_proxy(proxy, user_agent):
+        new_user_agent = user_agent
+        if random_user_agent:
+            new_user_agent = random.choice(user_agents)
+        valid, time_taken, error = proxy.check(site, timeout, new_user_agent)
+        message = {
+            True: f"{proxy} is valid, took {time_taken} seconds",
+            False: f"{proxy} is invalid: {repr(error)}",
+        }[valid]
+        verbose_print(verbose, message)
+        valid_proxies.extend([proxy] if valid else [])
+
+    processes = []
+    for proxy in proxies:
+        p = Thread(target=check_proxy, args=(proxy, user_agent))
+        processes.append(p)
+
+    for p in processes:
+        p.start()
+
+    for p in processes:
+        p.join()
+
+    with open(file, "w") as f:
+        for proxy in valid_proxies:
+            f.write(str(proxy) + "\n")
+
+    print(f"Found {len(valid_proxies)} valid proxies")
+
+if __name__ == "__main__":
+    check("./proxy/http-test.txt", 100, "http", "https://google.com/", True, True)
