@@ -88,11 +88,7 @@ def check(file, timeout, method, site, verbose, random_user_agent):
     print(f"Found {len(valid_proxies)} valid proxies")
 
 if __name__ == "__main__":
-<<<<<<< HEAD
-    check("./proxy/http-test.txt", 100, "http", "https://google.com/", True, True)
-=======
     Console.print_logo()
     # Console.print_seperator()
     
     check("./proxy/http-test.txt", 100, "http", "https://google.com/", True, True)
->>>>>>> 14ff4c0a577e87e4f42cec24c4f41063b513c228
