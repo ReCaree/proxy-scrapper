@@ -5,8 +5,7 @@ from threading import Thread
 
 # https://github.com/iw4p/proxy-scraper/blob/master/proxyChecker.py
 
-Console.print_logo()
-# Console.print_seperator()
+
 
 user_agents = []
 with open("user_agents.txt", "r") as f:
@@ -88,5 +87,8 @@ def check(file, timeout, method, site, verbose, random_user_agent):
 
     print(f"Found {len(valid_proxies)} valid proxies")
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
+    Console.print_logo()
+    # Console.print_seperator()
+    
     check("./proxy/http-test.txt", 100, "http", "https://google.com/", True, True)
