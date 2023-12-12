@@ -12,9 +12,11 @@ jobs:
     - name: Setup Python
       uses: actions/setup-python@v4.2.0
       with:
-        python-version: 3.10.1
+        python-version: "3.10"
+        architecture: "x64"
+        cache: 'pip'
     - name: Install Python dependencies
-      uses: py-actions/py-dependency-install@v3.0.0
+      run: pip install -r requirements.txt
     - name: Run the scrapper
       run: python scrapper.py 
     - name: Run the http checker
