@@ -88,5 +88,5 @@ def check(file, timeout, method, site, verbose, random_user_agent):
 
     print(f"Found {len(valid_proxies)} valid proxies")
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
     check("./proxy/http-test.txt", 100, "http", "https://google.com/", True, True)
