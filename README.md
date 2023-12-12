@@ -10,6 +10,7 @@ Proxy Scrapper that scrapes proxy and check the proxies (http only) from ~40 sou
 
 - HTTP(s)
   ```bash
+  # Original
   wget https://raw.githubusercontent.com/ReCaree/proxy-scrapper/master/proxy/http.txt
   # Duplicates Removed
   wget https://raw.githubusercontent.com/ReCaree/proxy-scrapper/master/proxy/http-removed.txt
@@ -17,6 +18,7 @@ Proxy Scrapper that scrapes proxy and check the proxies (http only) from ~40 sou
 - SOCKS4
 
   ```bash
+  # Original
   wget https://raw.githubusercontent.com/ReCaree/proxy-scrapper/master/proxy/socks4.txt
   # Duplicates Removed
   wget https://raw.githubusercontent.com/ReCaree/proxy-scrapper/master/proxy/socks4-removed.txt
@@ -24,6 +26,7 @@ Proxy Scrapper that scrapes proxy and check the proxies (http only) from ~40 sou
 
 - SOCKS5
   ```bash
+  # Original
   wget https://raw.githubusercontent.com/ReCaree/proxy-scrapper/master/proxy/socks5.txt
   # Duplicates Removed
   wget https://raw.githubusercontent.com/ReCaree/proxy-scrapper/master/proxy/socks5-removed.txt
@@ -42,6 +45,11 @@ Proxy Scrapper that scrapes proxy and check the proxies (http only) from ~40 sou
   ```bash
   python scrapper.py
   ```
+
+# Todo
+
+- Add SOCK 4/5 checker
+- Better multithreading
 
 # Contributing
 
